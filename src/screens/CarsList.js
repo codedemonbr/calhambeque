@@ -1,9 +1,24 @@
 import React, { Component } from "react";
-import { SafeAreaView, View, Text, StyleSheet, FlatList } from "react-native";
+import {
+    SafeAreaView,
+    View,
+    Text,
+    StatusBar,
+    ImageBackground,
+    StyleSheet,
+    FlatList,
+    TouchableOpacity,
+    Platform,
+    Alert,
+} from "react-native";
 import axios from "axios";
+
+//Our components
+import Car from "../components/Car";
 import { server, showError } from "../common";
 
-import Car from "../components/Car";
+//Assets
+import carImg from "../../assets/imgs/cars.jpg";
 
 const initialState = {
     cars: [],
@@ -25,9 +40,20 @@ export default class CarList extends Component {
         }
     };
 
+    getImage = () => {
+        return carImg;
+    };
+
     render() {
         return (
             <SafeAreaView style={styles.container}>
+                <StatusBar />
+                {/* 3/10 */}
+                <ImageBackground
+                    source={this.getImage()}
+                    style={styles.background}
+                ></ImageBackground>
+                {/* 7/10 */}
                 <View style={styles.carList}>
                     <FlatList
                         data={this.state.cars}
@@ -52,5 +78,8 @@ const styles = StyleSheet.create({
     },
     carList: {
         flex: 7,
+    },
+    background: {
+        flex: 3,
     },
 });
