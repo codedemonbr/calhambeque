@@ -40,6 +40,15 @@ export default class CarList extends Component {
         }
     };
 
+    deleteCar = async (carId) => {
+        try {
+            await axios.delete(`${server}/cars/${carId}`);
+            this.loadCars();
+        } catch (e) {
+            showerror(e);
+        }
+    };
+
     getImage = () => {
         return carImg;
     };
@@ -59,11 +68,7 @@ export default class CarList extends Component {
                         data={this.state.cars}
                         keyExtractor={(item) => `${item._id}`}
                         renderItem={({ item }) => (
-                            <Car
-                                {...item}
-                                onToggleTask={this.toggleTask}
-                                onDelete={this.deleteTask}
-                            />
+                            <Car {...item} onDelete={this.deleteCar} />
                         )}
                     />
                 </View>
