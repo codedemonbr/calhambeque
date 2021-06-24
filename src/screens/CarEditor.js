@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     View,
     TextInput,
+    Modal,
 } from "react-native";
 import axios from "axios";
 import { FontAwesome as Icon } from "@expo/vector-icons";
@@ -56,76 +57,101 @@ export default class CarRegister extends Component {
         validations.push(this.state.age && this.state.age.length >= 4);
         const validForm = validations.reduce((t, a) => t && a);
         return (
-            <ImageBackground source={backgroundImage} style={styles.background}>
-                <Text style={styles.title}>Star Garage</Text>
-                <View style={styles.formContainer}>
-                    <CarInput
-                        icon="tags"
-                        placeholder="id"
-                        value={this.state._id}
-                        style={styles.input}
-                        onChangeText={(_id) => {
-                            this.setState({ _id });
-                        }}
-                    />
-                    <CarInput
-                        icon="car"
-                        placeholder="Model"
-                        value={this.state.title}
-                        style={styles.input}
-                        onChangeText={(title) => this.setState({ title })}
-                    />
-                    <CarInput
-                        icon="trademark"
-                        placeholder="Brand"
-                        value={this.state.brand}
-                        style={styles.input}
-                        onChangeText={(brand) => this.setState({ brand })}
-                    />
-                    <CarInput
-                        icon="money"
-                        placeholder="Price"
-                        value={this.state.price}
-                        style={styles.input}
-                        onChangeText={(price) => this.setState({ price })}
-                    />
-                    <CarInput
-                        icon="calendar"
-                        placeholder="Year"
-                        value={this.state.age}
-                        style={styles.input}
-                        onChangeText={(age) => this.setState({ age })}
-                    />
-                    <TouchableOpacity
-                        onPress={this.updateCar}
-                        disabled={!validForm}
-                    >
-                        <View
-                            style={[
-                                styles.button,
-                                validForm ? {} : { backgroundColor: "#AAA" },
-                            ]}
-                        >
-                            <Text style={styles.buttonText}>Update </Text>
+            <Modal
+                transparent={true}
+                visible={this.props.isVisible}
+                onRequestClose={this.props.onCancel}
+                animationType="slide"
+            >
+                <View style={styles.modalCentral}>
+                    <View style={styles.formContainer}>
+                        <CarInput
+                            icon="tags"
+                            placeholder="id"
+                            value={this.state._id}
+                            style={styles.input}
+                            onChangeText={(_id) => {
+                                this.setState({ _id });
+                            }}
+                        />
+                        <CarInput
+                            icon="car"
+                            placeholder="Model"
+                            value={this.state.title}
+                            style={styles.input}
+                            onChangeText={(title) => this.setState({ title })}
+                        />
+                        <CarInput
+                            icon="trademark"
+                            placeholder="Brand"
+                            value={this.state.brand}
+                            style={styles.input}
+                            onChangeText={(brand) => this.setState({ brand })}
+                        />
+                        <CarInput
+                            icon="money"
+                            placeholder="Price"
+                            value={this.state.price}
+                            style={styles.input}
+                            onChangeText={(price) => this.setState({ price })}
+                        />
+                        <CarInput
+                            icon="calendar"
+                            placeholder="Year"
+                            value={this.state.age}
+                            style={styles.input}
+                            onChangeText={(age) => this.setState({ age })}
+                        />
+                        <View style={styles.btnContainer}>
+                            <TouchableOpacity
+                                onPress={this.updateCar}
+                                disabled={!validForm}
+                            >
+                                <View
+                                    style={[
+                                        styles.button,
+                                        validForm
+                                            ? {}
+                                            : { backgroundColor: "#AAA" },
+                                    ]}
+                                >
+                                    <Text style={styles.buttonText}>
+                                        Update{" "}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.getCar}>
+                                <View style={[styles.button]}>
+                                    <Text style={styles.buttonText}>
+                                        Load Car
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={this.props.onCancel}>
+                                <View
+                                    style={[
+                                        styles.button,
+                                        { backgroundColor: "#B33" },
+                                    ]}
+                                >
+                                    <Text style={styles.buttonText}>
+                                        Cancel
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={this.getCar}>
-                        <View style={[styles.button]}>
-                            <Text style={styles.buttonText}>Load Car</Text>
-                        </View>
-                    </TouchableOpacity>
+                    </View>
                 </View>
-            </ImageBackground>
+            </Modal>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    background: {
-        flex: 1,
-        width: "100%",
+    btnContainer: {
+        flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-around",
     },
     title: {
         color: commonStyles.colors.secondary,
@@ -153,10 +179,17 @@ const styles = StyleSheet.create({
         marginTop: 10,
         padding: 10,
         alignItems: "center",
+        justifyContent: "center",
         borderRadius: 25,
     },
     buttonText: {
         color: "#FFF",
         fontSize: 20,
+    },
+    modalCentral: {
+        flex: 1,
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
     },
 });

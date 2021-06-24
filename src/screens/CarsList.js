@@ -17,6 +17,7 @@ const Icon = FontAwesome;
 
 //Our components
 import Car from "../components/Car";
+import CarEditor from "./CarEditor";
 import { server, showError } from "../common";
 
 //Assets
@@ -24,6 +25,7 @@ import carImg from "../../assets/imgs/amazingCar.jpg";
 import commonStyles from "../commonStyles";
 
 const initialState = {
+    showEditor: false,
     cars: [],
 };
 
@@ -61,6 +63,11 @@ export default class CarList extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <StatusBar />
+                <CarEditor
+                    isVisible={this.state.showEditor}
+                    onCancel={() => this.setState({ showEditor: false })}
+                    onSave={() => {}}
+                />
                 {/* 3/10 */}
                 <ImageBackground
                     source={this.getImage()}
@@ -70,6 +77,15 @@ export default class CarList extends Component {
                         <TouchableOpacity onPress={this.loadCars}>
                             <Icon
                                 name="refresh"
+                                size={20}
+                                color={commonStyles.colors.secondary}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.setState({ showEditor: true })}
+                        >
+                            <Icon
+                                name="list-alt"
                                 size={20}
                                 color={commonStyles.colors.secondary}
                             />
@@ -146,7 +162,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     iconBar: {
-        flexDirection: "row-reverse",
+        flexDirection: "row",
         marginHorizontal: 20,
         justifyContent: "space-between",
         marginTop: Platform.OS === "ios" ? 40 : 20,
