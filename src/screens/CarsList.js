@@ -11,7 +11,9 @@ import {
     Platform,
     Alert,
 } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
+const Icon = FontAwesome;
 
 //Our components
 import Car from "../components/Car";
@@ -19,6 +21,7 @@ import { server, showError } from "../common";
 
 //Assets
 import carImg from "../../assets/imgs/cars.jpg";
+import commonStyles from "../commonStyles";
 
 const initialState = {
     cars: [],
@@ -72,6 +75,13 @@ export default class CarList extends Component {
                         )}
                     />
                 </View>
+                <TouchableOpacity style={[styles.addButton]} activeOpacity={0.7} onPress={()=> this.setState()}>
+                    <Icon
+                        name="plus"
+                        size={20}
+                        color={commonStyles.colors.secondary}
+                    />
+                </TouchableOpacity>
             </SafeAreaView>
         );
     }
@@ -86,5 +96,16 @@ const styles = StyleSheet.create({
     },
     background: {
         flex: 3,
+    },
+    addButton: {
+        position: "absolute",
+        right: 30,
+        bottom: 30,
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#173",
     },
 });
