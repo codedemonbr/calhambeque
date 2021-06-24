@@ -12,4 +12,8 @@ function showError(err) {
     }
 }
 
-export { server, showError };
+function showSuccess(msg) {
+    Alert.alert("Success!", msg);
+}
+
+export { server, showError, showSuccess };
