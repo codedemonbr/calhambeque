@@ -36,12 +36,12 @@ export default (props) => {
             }
         >
             <View style={styles.container}>
-                <View>
+                <TouchableOpacity>
                     <Text style={styles.info}>Marca: {props.brand}</Text>
                     <Text style={styles.info}>Modelo: {props.title}</Text>
                     <Text style={styles.info}>Preço: {props.price}</Text>
                     <Text style={styles.info}>Ano: {props.age}</Text>
-                </View>
+                </TouchableOpacity>
             </View>
         </Swipeable>
     );

@@ -5,14 +5,17 @@ import {
     Text,
     TouchableOpacity,
     View,
+    TextInput,
 } from "react-native";
 import axios from "axios";
+import { FontAwesome as Icon } from "@expo/vector-icons";
 import { showError, showSuccess, server } from "../common";
 import commonStyles from "../commonStyles";
 import backgroundImage from "../../assets/imgs/carsMainPage.jpg";
 import CarInput from "../components/CarInput";
 
 const initialState = {
+    _id: "60d4ea54f8037d001c59e067",
     title: "",
     brand: "",
     price: "",
@@ -22,15 +25,27 @@ const initialState = {
 export default class CarRegister extends Component {
     state = { ...initialState };
 
-    create = async () => {
+    getCar = async () => {
         try {
-            const res = await axios.post(`${server}/cars`, {
+            const res = await axios.get(`${server}/cars/${this.state._id}`);
+            const data = res.data;
+            data.age = res.data.age.toString();
+            this.setState({ ...data });
+        } catch (err) {
+            console.log(err);
+            showError(err);
+        }
+    };
+
+    updateCar = async () => {
+        try {
+            const res = await axios.put(`${server}/cars/${this.state._id}`, {
                 title: this.state.title.trim(),
                 brand: this.state.brand.trim(),
                 price: this.state.price.trim(),
                 age: this.state.age,
             });
-            showSuccess("Car created!");
+            showSuccess("Car Updated!");
         } catch (err) {
             showError(err);
         }
@@ -44,6 +59,15 @@ export default class CarRegister extends Component {
             <ImageBackground source={backgroundImage} style={styles.background}>
                 <Text style={styles.title}>Star Garage</Text>
                 <View style={styles.formContainer}>
+                    <CarInput
+                        icon="tags"
+                        placeholder="id"
+                        value={this.state._id}
+                        style={styles.input}
+                        onChangeText={(_id) => {
+                            this.setState({ _id });
+                        }}
+                    />
                     <CarInput
                         icon="car"
                         placeholder="Model"
@@ -73,7 +97,7 @@ export default class CarRegister extends Component {
                         onChangeText={(age) => this.setState({ age })}
                     />
                     <TouchableOpacity
-                        onPress={this.create}
+                        onPress={this.updateCar}
                         disabled={!validForm}
                     >
                         <View
@@ -82,7 +106,12 @@ export default class CarRegister extends Component {
                                 validForm ? {} : { backgroundColor: "#AAA" },
                             ]}
                         >
-                            <Text style={styles.buttonText}>Create</Text>
+                            <Text style={styles.buttonText}>Update </Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.getCar}>
+                        <View style={[styles.button]}>
+                            <Text style={styles.buttonText}>Load Car</Text>
                         </View>
                     </TouchableOpacity>
                 </View>

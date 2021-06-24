@@ -4,14 +4,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import CarRegister from "./screens/CarRegister";
 import CarsList from "./screens/CarsList";
-
-import { FontAwesome as Icon } from "@expo/vector-icons";
+import CarEditor from "./screens/CarEditor";
 
 const Stack = createStackNavigator();
 
 const RootStackNav = () => {
     return (
-        <Stack.Navigator initialRouteName="">
+        <Stack.Navigator initialRouteName="CarsList">
             <Stack.Screen
                 name="CarList"
                 component={CarsList}
@@ -21,6 +20,11 @@ const RootStackNav = () => {
                 name="CarRegister"
                 component={CarRegister}
                 options={{ title: "Registro de Carro" }}
+            />
+            <Stack.Screen
+                name="CarEditor"
+                component={CarEditor}
+                options={{ title: "Atualização de Carro" }}
             />
         </Stack.Navigator>
     );
