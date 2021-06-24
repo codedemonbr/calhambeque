@@ -45,7 +45,7 @@ export default class CarRegister extends Component {
         const validForm = validations.reduce((t, a) => t && a);
         return (
             <ImageBackground source={backgroundImage} style={styles.background}>
-                <Text style={styles.title}>Cars</Text>
+                <Text style={styles.title}>Star Garage</Text>
                 <View style={styles.formContainer}>
                     <CarInput
                         icon="car"

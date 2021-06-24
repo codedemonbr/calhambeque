@@ -1,5 +1,5 @@
 import registerRootComponent from "expo/build/launch/registerRootComponent";
 
-import CarList from "./src/screens/CarsList";
+import Navigator from "./src/Navigator";
 
-registerRootComponent(CarList);
+registerRootComponent(Navigator);

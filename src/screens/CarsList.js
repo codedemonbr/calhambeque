@@ -20,7 +20,7 @@ import Car from "../components/Car";
 import { server, showError } from "../common";
 
 //Assets
-import carImg from "../../assets/imgs/cars.jpg";
+import carImg from "../../assets/imgs/amazingCar.jpg";
 import commonStyles from "../commonStyles";
 
 const initialState = {
@@ -37,7 +37,8 @@ export default class CarList extends Component {
     loadCars = async () => {
         try {
             const res = await axios.get(`${server}/cars`);
-            this.setState({ cars: res.data });
+            const stack = res.data.reverse();
+            this.setState({ cars: stack });
         } catch (e) {
             showError(e);
         }
@@ -64,7 +65,21 @@ export default class CarList extends Component {
                 <ImageBackground
                     source={this.getImage()}
                     style={styles.background}
-                ></ImageBackground>
+                >
+                    <View style={styles.iconBar}>
+                        <TouchableOpacity onPress={this.loadCars}>
+                            <Icon
+                                name="refresh"
+                                size={20}
+                                color={commonStyles.colors.secondary}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.titleBar}>
+                        <Text style={styles.title}>Star Garage</Text>
+                        <Text style={styles.subtitle}>Amazing cars</Text>
+                    </View>
+                </ImageBackground>
                 {/* 7/10 */}
                 <View style={styles.carList}>
                     <FlatList
@@ -75,7 +90,13 @@ export default class CarList extends Component {
                         )}
                     />
                 </View>
-                <TouchableOpacity style={[styles.addButton]} activeOpacity={0.7} onPress={()=> this.setState()}>
+                <TouchableOpacity
+                    style={[styles.addButton]}
+                    activeOpacity={0.7}
+                    onPress={() =>
+                        this.props.navigation.navigate("CarRegister")
+                    }
+                >
                     <Icon
                         name="plus"
                         size={20}
@@ -107,5 +128,27 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#173",
+    },
+    titleBar: {
+        flex: 1,
+        justifyContent: "flex-end",
+    },
+    title: {
+        color: commonStyles.colors.secondary,
+        fontSize: 50,
+        marginLeft: 20,
+        marginBottom: 20,
+    },
+    subtitle: {
+        color: commonStyles.colors.secondary,
+        fontSize: 30,
+        marginLeft: 20,
+        marginBottom: 30,
+    },
+    iconBar: {
+        flexDirection: "row-reverse",
+        marginHorizontal: 20,
+        justifyContent: "space-between",
+        marginTop: Platform.OS === "ios" ? 40 : 20,
     },
 });
