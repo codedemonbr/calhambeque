@@ -1,42 +1,21 @@
 import React, { Component } from "react";
-import {
-    ImageBackground,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    TextInput,
-    Modal,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Modal } from "react-native";
 import axios from "axios";
-import { FontAwesome as Icon } from "@expo/vector-icons";
 import { showError, showSuccess, server } from "../common";
 import commonStyles from "../commonStyles";
-import backgroundImage from "../../assets/imgs/carsMainPage.jpg";
 import CarInput from "../components/CarInput";
 
 const initialState = {
-    _id: "60d4ea54f8037d001c59e067",
-    title: "",
+    _id: "",
     brand: "",
+    title: "",
     price: "",
     age: "",
 };
-
 export default class CarRegister extends Component {
     state = { ...initialState };
 
-    getCar = async () => {
-        try {
-            const res = await axios.get(`${server}/cars/${this.state._id}`);
-            const data = res.data;
-            data.age = res.data.age.toString();
-            this.setState({ ...data });
-        } catch (err) {
-            console.log(err);
-            showError(err);
-        }
-    };
+    
 
     updateCar = async () => {
         try {
@@ -52,10 +31,26 @@ export default class CarRegister extends Component {
         }
     };
 
+    updateStateByProps = (prevProps) => {
+        try {
+            for (let key in this.props) {
+                if (prevProps[key] !== this.props[key]) {
+                    if (this.state[key] !== this.props[key]) {
+                        this.setState({
+                            [key]: this.props[key],
+                        });
+                    }
+                }
+            }
+        } catch (e) {
+            console.error(e.message);
+        }
+    };
+    componentDidUpdate(prevProps) {
+        this.updateStateByProps(prevProps);
+    }
+
     render() {
-        const validations = [];
-        validations.push(this.state.age && this.state.age.length >= 4);
-        const validForm = validations.reduce((t, a) => t && a);
         return (
             <Modal
                 transparent={true}
@@ -65,15 +60,6 @@ export default class CarRegister extends Component {
             >
                 <View style={styles.modalCentral}>
                     <View style={styles.formContainer}>
-                        <CarInput
-                            icon="tags"
-                            placeholder="id"
-                            value={this.state._id}
-                            style={styles.input}
-                            onChangeText={(_id) => {
-                                this.setState({ _id });
-                            }}
-                        />
                         <CarInput
                             icon="car"
                             placeholder="Model"
@@ -98,32 +84,20 @@ export default class CarRegister extends Component {
                         <CarInput
                             icon="calendar"
                             placeholder="Year"
-                            value={this.state.age}
+                            value={this.state.age.toString()}
                             style={styles.input}
                             onChangeText={(age) => this.setState({ age })}
                         />
                         <View style={styles.btnContainer}>
                             <TouchableOpacity
-                                onPress={this.updateCar}
-                                disabled={!validForm}
+                                onPress={() => {
+                                    this.updateCar();
+                                    this.props.onSave();
+                                }}
                             >
-                                <View
-                                    style={[
-                                        styles.button,
-                                        validForm
-                                            ? {}
-                                            : { backgroundColor: "#AAA" },
-                                    ]}
-                                >
-                                    <Text style={styles.buttonText}>
-                                        Update{" "}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={this.getCar}>
                                 <View style={[styles.button]}>
                                     <Text style={styles.buttonText}>
-                                        Load Car
+                                        Update
                                     </Text>
                                 </View>
                             </TouchableOpacity>

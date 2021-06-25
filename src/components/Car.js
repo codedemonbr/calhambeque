@@ -1,9 +1,12 @@
+/**refatorar
+ * transformar em componente classe e fazer busca individual
+ */
+
 import React from "react";
 import {
     View,
     Text,
     StyleSheet,
-    TouchableWithoutFeedback,
     TouchableOpacity,
 } from "react-native";
 
@@ -14,6 +17,19 @@ const Icon = FontAwesome;
 import commonStyles from "../commonStyles";
 
 export default (props) => {
+
+    const getCar = async () => {
+        try {
+            const res = await axios.get(`${server}/cars/${this.state._id}`);
+            const data = res.data;
+            data.age = res.data.age.toString();
+            this.setState({ ...data });
+        } catch (err) {
+            console.log(err);
+            showError(err);
+        }
+    };
+
     const getLeftContent = () => {
         return (
             <View style={styles.left}>
@@ -36,7 +52,9 @@ export default (props) => {
             }
         >
             <View style={styles.container}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => props.onEdit && props.onEdit()}
+                >
                     <Text style={styles.info}>Marca: {props.brand}</Text>
                     <Text style={styles.info}>Modelo: {props.title}</Text>
                     <Text style={styles.info}>Preço: {props.price}</Text>

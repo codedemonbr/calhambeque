@@ -9,7 +9,6 @@ import {
     FlatList,
     TouchableOpacity,
     Platform,
-    Alert,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
@@ -25,7 +24,13 @@ import carImg from "../../assets/imgs/amazingCar.jpg";
 import commonStyles from "../commonStyles";
 
 const initialState = {
+    _id: "",
+    brand: "",
+    title: "",
+    price: "",
+    age: "",
     showEditor: false,
+    needRefresh: false,
     cars: [],
 };
 
@@ -46,6 +51,8 @@ export default class CarList extends Component {
         }
     };
 
+    loadCar = async () => {};
+
     deleteCar = async (carId) => {
         try {
             await axios.delete(`${server}/cars/${carId}`);
@@ -65,8 +72,9 @@ export default class CarList extends Component {
                 <StatusBar />
                 <CarEditor
                     isVisible={this.state.showEditor}
+                    {...this.state}
                     onCancel={() => this.setState({ showEditor: false })}
-                    onSave={() => {}}
+                    onSave={() => this.setState({ showEditor: false })}
                 />
                 {/* 3/10 */}
                 <ImageBackground
@@ -77,15 +85,6 @@ export default class CarList extends Component {
                         <TouchableOpacity onPress={this.loadCars}>
                             <Icon
                                 name="refresh"
-                                size={20}
-                                color={commonStyles.colors.secondary}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => this.setState({ showEditor: true })}
-                        >
-                            <Icon
-                                name="list-alt"
                                 size={20}
                                 color={commonStyles.colors.secondary}
                             />
@@ -102,7 +101,20 @@ export default class CarList extends Component {
                         data={this.state.cars}
                         keyExtractor={(item) => `${item._id}`}
                         renderItem={({ item }) => (
-                            <Car {...item} onDelete={this.deleteCar} />
+                            <Car
+                                {...item}
+                                onDelete={this.deleteCar}
+                                onEdit={() =>
+                                    this.setState({
+                                        showEditor: true,
+                                        _id: item._id,
+                                        title: item.title,
+                                        brand: item.brand,
+                                        price: item.price,
+                                        age: item.age,
+                                    })
+                                }
+                            />
                         )}
                     />
                 </View>
